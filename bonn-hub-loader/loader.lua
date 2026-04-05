@@ -1,4 +1,5 @@
 -- loader.lua - Sistema de Key + Carregamento do Bonn HUB
+-- Versão com GET (compatível com Velocity e outros executores)
 -- GitHub: g32475542-eng/bonn-hub-loader
 -- Painel: https://painel-keys.onrender.com
 
@@ -79,13 +80,14 @@ statusLabel.TextSize = 12
 statusLabel.Font = Enum.Font.Gotham
 statusLabel.Parent = panel
 
+-- Função para validar a key usando GET (mais compatível com executores)
 local function validateKey(key)
-    local body = HttpService:JSONEncode({ key = key })
+    local url = API_URL .. "?key=" .. HttpService:URLEncode(key)
     local success, response = pcall(function()
-        return HttpService:PostAsync(API_URL, body, Enum.HttpContentType.ApplicationJson)
+        return game:HttpGet(url)
     end)
     if not success then
-        return false, "Erro ao conectar ao servidor de validação"
+        return false, "Erro de conexão (GET)"
     end
     local data = HttpService:JSONDecode(response)
     return data.valid, data.message
@@ -105,7 +107,7 @@ validateBtn.MouseButton1Click:Connect(function()
     if valid then
         statusLabel.Text = message or "Key válida! Carregando hub..."
         statusLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
-        task.wait(1)
+        wait(1)
         screenGui:Destroy()
         
         local successLoad, err = pcall(function()
