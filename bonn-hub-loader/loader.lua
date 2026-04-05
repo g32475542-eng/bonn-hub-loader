@@ -1,7 +1,5 @@
 -- loader.lua - Sistema de Key + Carregamento do Bonn HUB
--- Versão com GET (compatível com Velocity e outros executores)
--- GitHub: g32475542-eng/bonn-hub-loader
--- Painel: https://painel-keys.onrender.com
+-- Compatível com executores que não têm URLEncode
 
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
@@ -9,6 +7,21 @@ local player = Players.LocalPlayer
 
 local API_URL = "https://painel-keys.onrender.com/api/validate"
 local HUB_RAW_URL = "https://raw.githubusercontent.com/g32475542-eng/bonn-hub-loader/main/bonn-hub-loader/hub.lua"
+
+-- Função para validar key usando GET (evita URLEncode)
+local function validateKey(key)
+    -- Como não temos URLEncode, vamos evitar caracteres especiais na key
+    -- Se a key tiver espaços ou caracteres estranhos, pode falhar. Mas normalmente keys são alfanuméricas.
+    local url = API_URL .. "?key=" .. key
+    local success, response = pcall(function()
+        return game:HttpGet(url)
+    end)
+    if not success then
+        return false, "Erro de conexão"
+    end
+    local data = HttpService:JSONDecode(response)
+    return data.valid, data.message
+end
 
 -- Criar tela de entrada da key
 local screenGui = Instance.new("ScreenGui")
@@ -80,19 +93,7 @@ statusLabel.TextSize = 12
 statusLabel.Font = Enum.Font.Gotham
 statusLabel.Parent = panel
 
--- Função para validar a key usando GET (mais compatível com executores)
-local function validateKey(key)
-    local url = API_URL .. "?key=" .. HttpService:URLEncode(key)
-    local success, response = pcall(function()
-        return game:HttpGet(url)
-    end)
-    if not success then
-        return false, "Erro de conexão (GET)"
-    end
-    local data = HttpService:JSONDecode(response)
-    return data.valid, data.message
-end
-
+-- Ação do botão
 validateBtn.MouseButton1Click:Connect(function()
     local key = keyBox.Text
     if key == "" then
