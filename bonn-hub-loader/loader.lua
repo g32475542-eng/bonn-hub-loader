@@ -8,10 +8,8 @@ local player = Players.LocalPlayer
 local API_URL = "https://painel-keys.onrender.com/api/validate"
 local HUB_RAW_URL = "https://raw.githubusercontent.com/g32475542-eng/bonn-hub-loader/main/bonn-hub-loader/hub.lua"
 
--- Função para validar key usando GET (evita URLEncode)
+-- Função para validar key usando GET (sem URLEncode)
 local function validateKey(key)
-    -- Como não temos URLEncode, vamos evitar caracteres especiais na key
-    -- Se a key tiver espaços ou caracteres estranhos, pode falhar. Mas normalmente keys são alfanuméricas.
     local url = API_URL .. "?key=" .. key
     local success, response = pcall(function()
         return game:HttpGet(url)
