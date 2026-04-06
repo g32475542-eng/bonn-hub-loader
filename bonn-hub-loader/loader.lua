@@ -1,5 +1,5 @@
 -- loader.lua - Estilo Bonn HUB (arrastável, escuro, cantos redondos)
--- Sem link encurtador, com placeholder personalizado
+-- Com botão Get Key e placeholder personalizado
 
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
@@ -32,8 +32,8 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 -- Container (para animação e arrasto)
 local container = Instance.new("Frame")
 container.Name = "Container"
-container.Size = UDim2.new(0, 380, 0, 280)
-container.Position = UDim2.new(0.5, -190, 0.5, -140)
+container.Size = UDim2.new(0, 420, 0, 280) -- Aumentei largura para caber dois botões
+container.Position = UDim2.new(0.5, -210, 0.5, -140)
 container.BackgroundTransparency = 1
 container.Parent = screenGui
 
@@ -46,18 +46,16 @@ window.BorderSizePixel = 0
 window.ClipsDescendants = true
 window.Parent = container
 
--- Cantos arredondados
 local windowCorner = Instance.new("UICorner")
 windowCorner.CornerRadius = UDim.new(0, 12)
 windowCorner.Parent = window
 
--- Borda sutil
 local windowBorder = Instance.new("UIStroke")
 windowBorder.Thickness = 1.5
 windowBorder.Color = Color3.fromRGB(35, 35, 45)
 windowBorder.Parent = window
 
--- TopBar (arrastável)
+-- TopBar
 local topBar = Instance.new("Frame")
 topBar.Name = "TopBar"
 topBar.Size = UDim2.new(1, 0, 0, 45)
@@ -69,7 +67,6 @@ local topBarCorner = Instance.new("UICorner")
 topBarCorner.CornerRadius = UDim.new(0, 12)
 topBarCorner.Parent = topBar
 
--- Máscara para esconder cantos inferiores da topBar
 local topBarMask = Instance.new("Frame")
 topBarMask.Size = UDim2.new(1, 0, 0, 10)
 topBarMask.Position = UDim2.new(0, 0, 1, -10)
@@ -77,7 +74,6 @@ topBarMask.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
 topBarMask.BorderSizePixel = 0
 topBarMask.Parent = topBar
 
--- Título
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Size = UDim2.new(1, -20, 1, 0)
 titleLabel.Position = UDim2.new(0, 20, 0, 0)
@@ -90,7 +86,6 @@ titleLabel.TextYAlignment = Enum.TextYAlignment.Center
 titleLabel.Font = Enum.Font.SourceSansBold
 titleLabel.Parent = topBar
 
--- Botão minimizar (opcional, mas mantém estilo)
 local minimizeBtn = Instance.new("TextButton")
 minimizeBtn.Size = UDim2.new(0, 40, 0, 45)
 minimizeBtn.Position = UDim2.new(1, -40, 0, 0)
@@ -106,10 +101,9 @@ minimizeBtn.MouseButton1Click:Connect(function()
     container.Visible = false
     task.wait(0.1)
     container.Visible = true
-    -- Não implementamos minimização completa, apenas esconde momentaneamente
 end)
 
--- Conteúdo principal
+-- Conteúdo
 local content = Instance.new("Frame")
 content.Name = "Content"
 content.Size = UDim2.new(1, 0, 1, -45)
@@ -119,13 +113,13 @@ content.BackgroundTransparency = 0
 content.BorderSizePixel = 0
 content.Parent = window
 
--- Caixa de texto (sem fundo cinza, apenas borda)
+-- Caixa de texto
 local keyBox = Instance.new("TextBox")
 keyBox.Size = UDim2.new(0, 280, 0, 42)
-keyBox.Position = UDim2.new(0.5, -140, 0.4, 0)
+keyBox.Position = UDim2.new(0.5, -140, 0.35, 0)
 keyBox.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
 keyBox.TextColor3 = Color3.fromRGB(230, 230, 230)
-keyBox.PlaceholderText = "amobonnhub"
+keyBox.PlaceholderText = "ex: amobonnhub"
 keyBox.PlaceholderColor3 = Color3.fromRGB(120, 120, 140)
 keyBox.Text = ""
 keyBox.Font = Enum.Font.SourceSans
@@ -138,34 +132,67 @@ local boxCorner = Instance.new("UICorner")
 boxCorner.CornerRadius = UDim.new(0, 8)
 boxCorner.Parent = keyBox
 
--- Borda da caixa de texto (UIStroke)
 local boxBorder = Instance.new("UIStroke")
 boxBorder.Thickness = 1
 boxBorder.Color = Color3.fromRGB(45, 45, 55)
 boxBorder.Parent = keyBox
 
--- Botão validar
-local validateBtn = Instance.new("TextButton")
-validateBtn.Size = UDim2.new(0, 160, 0, 42)
-validateBtn.Position = UDim2.new(0.5, -80, 0.65, 0)
-validateBtn.Text = "VALIDAR ACESSO"
-validateBtn.BackgroundColor3 = Color3.fromRGB(30, 120, 80)
-validateBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-validateBtn.Font = Enum.Font.SourceSansBold
-validateBtn.TextSize = 14
-validateBtn.BorderSizePixel = 0
-validateBtn.Parent = content
+-- Botão VERIFICAR
+local verifyBtn = Instance.new("TextButton")
+verifyBtn.Size = UDim2.new(0, 130, 0, 42)
+verifyBtn.Position = UDim2.new(0.5, -140, 0.6, 0)
+verifyBtn.Text = "VERIFICAR"
+verifyBtn.BackgroundColor3 = Color3.fromRGB(30, 120, 80)
+verifyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+verifyBtn.Font = Enum.Font.SourceSansBold
+verifyBtn.TextSize = 14
+verifyBtn.BorderSizePixel = 0
+verifyBtn.Parent = content
 
-local btnCorner = Instance.new("UICorner")
-btnCorner.CornerRadius = UDim.new(0, 8)
-btnCorner.Parent = validateBtn
+local verifyCorner = Instance.new("UICorner")
+verifyCorner.CornerRadius = UDim.new(0, 8)
+verifyCorner.Parent = verifyBtn
 
--- Efeito hover no botão
-validateBtn.MouseEnter:Connect(function()
-    TweenService:Create(validateBtn, TweenInfo.new(0.15), { BackgroundColor3 = Color3.fromRGB(40, 140, 100) }):Play()
+verifyBtn.MouseEnter:Connect(function()
+    TweenService:Create(verifyBtn, TweenInfo.new(0.15), { BackgroundColor3 = Color3.fromRGB(40, 140, 100) }):Play()
 end)
-validateBtn.MouseLeave:Connect(function()
-    TweenService:Create(validateBtn, TweenInfo.new(0.15), { BackgroundColor3 = Color3.fromRGB(30, 120, 80) }):Play()
+verifyBtn.MouseLeave:Connect(function()
+    TweenService:Create(verifyBtn, TweenInfo.new(0.15), { BackgroundColor3 = Color3.fromRGB(30, 120, 80) }):Play()
+end)
+
+-- Botão GET KEY
+local getKeyBtn = Instance.new("TextButton")
+getKeyBtn.Size = UDim2.new(0, 110, 0, 42)
+getKeyBtn.Position = UDim2.new(0.5, 10, 0.6, 0) -- ao lado do VERIFICAR
+getKeyBtn.Text = "GET KEY"
+getKeyBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 100)
+getKeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+getKeyBtn.Font = Enum.Font.SourceSansBold
+getKeyBtn.TextSize = 14
+getKeyBtn.BorderSizePixel = 0
+getKeyBtn.Parent = content
+
+local getKeyCorner = Instance.new("UICorner")
+getKeyCorner.CornerRadius = UDim.new(0, 8)
+getKeyCorner.Parent = getKeyBtn
+
+getKeyBtn.MouseEnter:Connect(function()
+    TweenService:Create(getKeyBtn, TweenInfo.new(0.15), { BackgroundColor3 = Color3.fromRGB(100, 100, 120) }):Play()
+end)
+getKeyBtn.MouseLeave:Connect(function()
+    TweenService:Create(getKeyBtn, TweenInfo.new(0.15), { BackgroundColor3 = Color3.fromRGB(80, 80, 100) }):Play()
+end)
+
+-- Ação do botão GET KEY (copiar link encurtado ou abrir página)
+getKeyBtn.MouseButton1Click:Connect(function()
+    local link = "https://discord.gg/QQrpaubeaw" -- substitua pelo seu link de aquisição de key
+    setclipboard(link) -- tenta copiar para área de transferência
+    statusLabel.Text = "Link copiado! Acesse para obter sua key."
+    statusLabel.TextColor3 = Color3.fromRGB(100, 200, 255)
+    task.wait(2)
+    if statusLabel.Text == "Link copiado! Acesse para obter sua key." then
+        statusLabel.Text = ""
+    end
 end)
 
 -- Label de status
@@ -180,7 +207,7 @@ statusLabel.Font = Enum.Font.SourceSans
 statusLabel.TextXAlignment = Enum.TextXAlignment.Center
 statusLabel.Parent = content
 
--- Rodapé (linha sutil)
+-- Rodapé
 local footer = Instance.new("Frame")
 footer.Size = UDim2.new(1, 0, 0, 2)
 footer.Position = UDim2.new(0, 0, 1, -2)
@@ -188,7 +215,7 @@ footer.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
 footer.BorderSizePixel = 0
 footer.Parent = window
 
--- Sistema de arrastar (igual ao hub)
+-- Sistema de arrastar
 local dragging = false
 local dragStart = nil
 local startPos = nil
@@ -219,12 +246,12 @@ end)
 container.BackgroundTransparency = 1
 container.Size = UDim2.new(0, 0, 0, 0)
 TweenService:Create(container, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-    Size = UDim2.new(0, 380, 0, 280),
+    Size = UDim2.new(0, 420, 0, 280),
     BackgroundTransparency = 1
 }):Play()
 
 -- Validação
-validateBtn.MouseButton1Click:Connect(function()
+verifyBtn.MouseButton1Click:Connect(function()
     local key = keyBox.Text
     if key == "" then
         statusLabel.Text = "Digite uma key!"
@@ -232,8 +259,8 @@ validateBtn.MouseButton1Click:Connect(function()
         return
     end
     
-    validateBtn.Text = "VERIFICANDO..."
-    validateBtn.Active = false
+    verifyBtn.Text = "VERIFICANDO..."
+    verifyBtn.Active = false
     
     local valid, message = validateKey(key)
     if valid then
@@ -251,7 +278,7 @@ validateBtn.MouseButton1Click:Connect(function()
     else
         statusLabel.Text = message or "Key inválida ou expirada"
         statusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
-        validateBtn.Text = "VALIDAR ACESSO"
-        validateBtn.Active = true
+        verifyBtn.Text = "VERIFICAR"
+        verifyBtn.Active = true
     end
 end)
